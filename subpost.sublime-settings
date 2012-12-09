@@ -1,0 +1,10 @@
+{
+	// Subpost User ID
+	"userId": "",
+
+	// Subpost Api Token
+	"apiToken": "",
+
+	// Subpost Hostname
+	"hostname": ""
+}

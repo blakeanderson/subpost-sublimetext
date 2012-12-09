@@ -1,0 +1,16 @@
+[
+    {
+        "caption": "Subpost: publish current file to subpost",
+        "command": "subpost_post",
+        "args": {
+            "target": "subpost"
+        }
+    },
+    {
+        "caption": "Subpost: send current file to subpost as a draft",
+        "command": "subpost_post",
+        "args": {
+            "target": "subpost_draft"
+        }
+    }
+]
