@@ -18,6 +18,12 @@ class SubpostManager():
         request_data = {}
         if front_matter.has_key('title'):
             request_data['title'] = front_matter['title']
+        if front_matter.has_key('subtitle'):
+            request_data['subtitle'] = front_matter['subtitle']
+        if front_matter.has_key('name'):
+            request_data['name'] = front_matter['name']
+        if front_matter.has_key('page'):
+            request_data['page'] = True
         print request_data
         return request_data
 
@@ -30,6 +36,9 @@ class SubpostManager():
             request_data['state'] = "draft"
         encoded_data = urllib.urlencode(request_data)
         request = urllib2.Request('http://subpost.herokuapp.com/v1/' + self.settings["hostname"] + '/post')
+        if request_data['page']:
+            print "page"
+            request = urllib2.Request('http://subpost.herokuapp.com/v1/' + self.settings["hostname"] + '/page')
         base64string = base64.encodestring('%s:%s' % (self.settings['userId'], self.settings['apiToken'])).replace('\n', '')
         request.add_header("Authorization", "Basic %s" % base64string)
         print request
