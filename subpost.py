@@ -18,27 +18,32 @@ class SubpostManager():
         request_data = {}
         if front_matter.has_key('title'):
             request_data['title'] = front_matter['title']
+        if front_matter.has_key('tags'):
+            request_data['tags'] = front_matter['tags']
         if front_matter.has_key('subtitle'):
             request_data['subtitle'] = front_matter['subtitle']
         if front_matter.has_key('name'):
             request_data['name'] = front_matter['name']
         if front_matter.has_key('page'):
-            request_data['page'] = True
+            request_data['page'] = front_matter['page']
+        if front_matter.has_key('type'):
+            request_data['type'] = front_matter['type']
+        else:
+            request_data['type'] = 'text'
         print request_data
         return request_data
 
     def post_to_subpost(self, content, draft):
         request_data = self.load_front_matter(content)
         sub_content = re.sub( re.compile(r'(\s*---\s*.*\s*---)',  re.MULTILINE|re.DOTALL), "", content)
-        request_data['body'] = sub_content
-        request_data['type'] = 'text'
+        if request_data['type'] == 'text':
+            request_data['body'] = sub_content
+        elif request_data['type'] == 'link':
+            request_data['description'] = sub_content
         if draft:
             request_data['state'] = "draft"
         encoded_data = urllib.urlencode(request_data)
         request = urllib2.Request('http://subpost.herokuapp.com/v1/' + self.settings["hostname"] + '/post')
-        if request_data['page']:
-            print "page"
-            request = urllib2.Request('http://subpost.herokuapp.com/v1/' + self.settings["hostname"] + '/page')
         base64string = base64.encodestring('%s:%s' % (self.settings['userId'], self.settings['apiToken'])).replace('\n', '')
         request.add_header("Authorization", "Basic %s" % base64string)
         print request
